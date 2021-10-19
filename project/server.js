@@ -1,6 +1,5 @@
 const express = require('express');
-
-const { PORT = 3008 } = process.env;
+const cors = require('cors');
 
 const app = express();
 const server = require('http').Server(app);
@@ -12,21 +11,18 @@ const io = require('socket.io')(server, {
 
 const rooms = new Map();
 
+app.use(cors());
+
 app.get('/rooms', (req, res) => {
     res.json(rooms);
 });
 
 app.post('/rooms', (req, res) => {
-  console.log('Hello world');
+  console.log('Woo-hoo');
 });
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
     console.log('user connected', socket.id)
 })
 
-server.listen(PORT, (err) => {
-    if (err) {
-        throw Error(err)
-    }
-    console.log(`Сервер запущен на порту ${PORT}`)
-});
+server.listen(3008);

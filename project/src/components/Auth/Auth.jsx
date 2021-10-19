@@ -2,30 +2,33 @@ import React, { useState } from 'react';
 import './Auth.css';
 import socket from '../../middlewares/socket';
 
-const axios = require('axios');
+import Axios from 'axios';
 
 function Auth() {
     
     const [roomName, setRoomName] = useState('');
     const [userName, setUserName] = useState('');
 
-    const onAuth = () => {
+    const onAuth = (e) => {
+        e.preventDefault();
         if (!userName || !roomName) {
             return alert('Введите данные')
         }
-        axios.post('/rooms', {
+        Axios.post('rooms', {
             roomName,
-            userName,
-        });
-    }
+            userName
+        })
+            .then(res => res.send(400))
+            .catch(err => console.log(err))
+    };
 
     return (
         <div className="auth">
-            <div className="auth-container">
+            <form onSubmit={onAuth} className="auth-container">
                 <h2 className="auth-container__title">
                     Пожалуйста, введите ваше имя и название для нового чата
                 </h2>
-                <form className="auth-container__form">
+                <div className="auth-container__form">
                     <input
                         className="auth-container__input"
                         type="text"
@@ -47,14 +50,13 @@ function Auth() {
                         onChange={e => setUserName(e.target.value)}
                     />
                     <button 
+                        type="submit"
                         className="auth-container__submit-btn"
-                        type="button"
-                        onClick={onAuth}
                     >
                         Войти
                     </button>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     )
 }
