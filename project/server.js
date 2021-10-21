@@ -2,27 +2,43 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
+app.use(cors());
 const server = require('http').Server(app);
 const io = require('socket.io')(server, {
   cors: {
-    origin: "*",
-  },
+    origin: '*',
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+  }
 });
 
-const rooms = new Map();
+app.use(express.json());
 
-app.use(cors());
+const rooms = new Map();
 
 app.get('/rooms', (req, res) => {
     res.json(rooms);
 });
 
 app.post('/rooms', (req, res) => {
-  console.log('Woo-hoo');
+  const { roomName, userName } = req.body;
+  if (!rooms.has(roomName)) {
+    rooms.set(roomName, new Map([
+      ['users', new Map()],
+      ['messages', []],
+    ]))
+  }
 });
 
 io.on('connection', (socket) => {
-    console.log('user connected', socket.id)
-})
+  socket.on('ROOM:JOIN', (data) => {
+    console.log(data)
+  });
 
-server.listen(3008);
+  console.log('user connected', socket.id)
+});
+
+server.listen(3008, () => {
+  console.log(`Сервер запущен на порту 3008`)
+});
