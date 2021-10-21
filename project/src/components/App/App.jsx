@@ -19,9 +19,13 @@ function App() {
     socket.emit('ROOM:JOIN', obj);
   };
 
-  window.socket = socket;
+  React.useEffect(() => {
+    socket.on('ROOM:JOINED', (users) => {
+      console.log('Новый пользователь!', users)
+    });
+  },[]);
 
-  console.log(state);
+  window.socket = socket;
 
   return (
     <div className="app">{!state.joined && <Auth onLogin={onLogin} />}</div>

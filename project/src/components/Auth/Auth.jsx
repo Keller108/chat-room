@@ -21,7 +21,8 @@ function Auth({ onLogin }) {
         setIsLoading(true);
 
         await axios.post('rooms', obj)
-        .then(onLogin);
+        .then(onLogin(obj))
+        .catch(err => console.log(err))
     };
 
     return (

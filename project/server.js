@@ -23,22 +23,26 @@ app.get('/rooms', (req, res) => {
 });
 
 app.post('/rooms', (req, res) => {
-  const { roomName, userName } = req.body;
-  if (!rooms.has(roomName)) {
-    rooms.set(roomName, new Map([
+  const data = req.body;
+  if (!rooms.has(data.roomName)) {
+    rooms.set(data.roomName, new Map([
       ['users', new Map()],
       ['messages', []],
     ]));
   }
-  res.send();
+  res.send(data);
 });
 
 io.on('connection', (socket) => {
-  socket.on('ROOM:JOIN', (data) => {
-    console.log(data)
+  socket.on('ROOM:JOIN', ({roomName, userName}) => {
+    socket.join(roomName);
+    rooms.get(roomName).get('users').set(socket.id, userName);
+    const users = rooms.get(roomName).get('users').values();
+    socket.broadcast.to(roomName).emit('ROOM:JOINED', users);
+    console.log(roomName, userName)
   });
 
-  console.log('user connected', socket.id)
+  console.log('user connected', socket.id);
 });
 
 server.listen(3008, () => {
