@@ -14,6 +14,7 @@ const io = require('socket.io')(server, {
 });
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const rooms = new Map();
 
@@ -27,8 +28,9 @@ app.post('/rooms', (req, res) => {
     rooms.set(roomName, new Map([
       ['users', new Map()],
       ['messages', []],
-    ]))
+    ]));
   }
+  res.send();
 });
 
 io.on('connection', (socket) => {

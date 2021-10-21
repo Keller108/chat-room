@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
+import reducer from '../../middlewares/reducer.js';
 import Auth from '../Auth/Auth';
-import reducer from "../../middlewares/reducer";
 import socket from '../../middlewares/socket';
 
 function App() {
@@ -17,7 +17,6 @@ function App() {
       payload: obj,
     });
     socket.emit('ROOM:JOIN', obj);
-    console.log(obj)
   };
 
   window.socket = socket;

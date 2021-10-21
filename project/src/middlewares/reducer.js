@@ -1,5 +1,4 @@
-/* eslint-disable import/no-anonymous-default-export */
-export default (state, action) => {
+function reducer(state, action) {
     switch (action.type) {
         case 'JOINED':
             return {
@@ -12,3 +11,5 @@ export default (state, action) => {
             return state; 
     }
 }
+
+export default reducer;

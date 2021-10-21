@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './Auth.css';
-
-import Axios from 'axios';
+import axios from 'axios';
 
 function Auth({ onLogin }) {
     
@@ -12,7 +11,7 @@ function Auth({ onLogin }) {
     const onAuth = async () => {
         if (!userName || !roomName) {
             return alert('Введите данные')
-        };
+        }
 
         const obj = {
             roomName,
@@ -20,8 +19,9 @@ function Auth({ onLogin }) {
         };
 
         setIsLoading(true);
-        await Axios.post('/rooms', obj);
-        onLogin();
+
+        await axios.post('rooms', obj)
+        .then(onLogin);
     };
 
     return (
