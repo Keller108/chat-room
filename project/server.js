@@ -30,14 +30,14 @@ app.post('/rooms', (req, res) => {
       ['messages', []],
     ]));
   }
-  res.send(data);
+  res.send();
 });
 
 io.on('connection', (socket) => {
   socket.on('ROOM:JOIN', ({roomName, userName}) => {
     socket.join(roomName);
     rooms.get(roomName).get('users').set(socket.id, userName);
-    const users = rooms.get(roomName).get('users').values();
+    const users = [...rooms.get(roomName).get('users').values()];
     socket.broadcast.to(roomName).emit('ROOM:JOINED', users);
     console.log(roomName, userName)
   });

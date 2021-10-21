@@ -39,8 +39,8 @@ function Auth({ onLogin }) {
                         maxLength="30"
                         required
                         placeholder="Ваше имя"
-                        value={roomName}
-                        onChange={e => setRoomName(e.target.value)}
+                        value={userName}
+                        onChange={e => setUserName(e.target.value)}
                     />
                     <input 
                         className="auth-container__input"
@@ -49,8 +49,8 @@ function Auth({ onLogin }) {
                         maxLength="20"
                         required
                         placeholder="Название для нового чата"
-                        value={userName}
-                        onChange={e => setUserName(e.target.value)}
+                        value={roomName}
+                        onChange={e => setRoomName(e.target.value)}
                     />
                     <button 
                         onClick={onAuth}
