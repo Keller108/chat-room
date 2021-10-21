@@ -2,15 +2,19 @@ import React from 'react';
 import './Chat.css';
 import socket from '../../middlewares/socket';
 
-function Chat() {
+function Chat({ users, messages }) {
   const [messageValue, setMessageValue] = React.useState('');
 
+  console.log(users);
+  
   return (
     <div className="chat">
       <div className="chat-users">
-        <b>Онлайн: (1)</b>
+        <b>Онлайн ({users.length}):</b>
         <ul>
-          <li>Test user</li>
+          {users.map((name, index) => (
+             <li key={name + index}>{name}</li>
+          ))}
         </ul>
       </div>
       <div className="chat-messages">

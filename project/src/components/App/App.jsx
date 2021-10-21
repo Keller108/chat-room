@@ -22,16 +22,21 @@ function App() {
     socket.emit('ROOM:JOIN', obj);
   };
 
-  React.useEffect(() => {
-    socket.on('ROOM:JOINED', (users) => {
-      dispatch({
-        type: 'SET_USERS',
-        payload: users,
-      })
+  const setUsers = (users) => {
+    dispatch({
+      type: 'SET_USERS',
+      payload: users,
     });
+  };
+
+  React.useEffect(() => {
+    socket.on('ROOM:JOINED', setUsers);
+    socket.on('ROOM:SET_USERS', setUsers);
   },[]);
 
   window.socket = socket;
+
+  console.log(state);
 
   return (
     <div className="app">{!state.joined ? <Auth onLogin={onLogin}/> : <Chat {...state}/>}</div>
