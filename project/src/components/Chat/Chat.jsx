@@ -6,12 +6,13 @@ function Chat({ users, messages, userName, roomName }) {
   const [messageValue, setMessageValue] = React.useState('');
 
   const onMessageSend = () => {
-    socket.emmit('ROOM:NEW_MESSAGE', {
+    socket.emit('ROOM:NEW_MESSAGE', {
       userName: messageValue,
       roomName,
       text: messageValue,
     })
-  };
+    setMessageValue('');
+  }; 
   
   return (
     <div className="chat">
@@ -26,7 +27,8 @@ function Chat({ users, messages, userName, roomName }) {
       <div className="chat-messages">
         <div className="messages">
           {
-            messages.map((message) => (
+            messages.map((message) => 
+            (
               <div className="message">
                 <p>{message.text}</p>
                 <div>

@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
   socket.on('ROOM:NEW_MESSAGE', ({roomName, userName, text}) => {
     const obj = { userName, text };
     rooms.get(roomName).get('messages').push(obj);
-    socket.broadcast.to(roomName).emit('ROOM:NEW_MESSAGE ', obj);
+    socket.broadcast.to(roomName).emit('ROOM:NEW_MESSAGE', obj);
   });
 
   socket.on('disconnect', () => {
