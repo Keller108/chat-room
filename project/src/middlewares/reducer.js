@@ -13,11 +13,11 @@ function reducer(state, action) {
                 joined: true,
                 users: action.payload,
             };
-        case 'SET_MESSAGES':
+        case 'NEW_MESSAGE':
             return {
                 ...state,
                 joined: true,
-                messages: action.payload,
+                messages: [...state.messages, action.payload],
             };    
         default:
             return state; 

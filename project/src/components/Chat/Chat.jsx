@@ -2,10 +2,16 @@ import React from 'react';
 import './Chat.css';
 import socket from '../../middlewares/socket';
 
-function Chat({ users, messages }) {
+function Chat({ users, messages, userName, roomName }) {
   const [messageValue, setMessageValue] = React.useState('');
 
-  console.log(users);
+  const onMessageSend = () => {
+    socket.emmit('ROOM:NEW_MESSAGE', {
+      userName: messageValue,
+      roomName,
+      text: messageValue,
+    })
+  };
   
   return (
     <div className="chat">
@@ -19,18 +25,16 @@ function Chat({ users, messages }) {
       </div>
       <div className="chat-messages">
         <div className="messages">
-            <div className="message">
-              <p>Привет всем! Пытаюсь сделать свой чат! =)</p>
-              <div>
-                <span>Test User</span>
+          {
+            messages.map((message) => (
+              <div className="message">
+                <p>{message.text}</p>
+                <div>
+                  <span>{message.userName}</span>
+                </div>
               </div>
-            </div>
-            <div className="message">
-              <p>Привет всем! Пытаюсь сделать свой чат! =)</p>
-              <div>
-                <span>Test User</span>
-              </div>
-            </div>
+            ))
+          }
         </div>
         <form>
           <textarea
@@ -38,7 +42,10 @@ function Chat({ users, messages }) {
             value={messageValue}
             className="form-control"
             rows="3"></textarea>
-          <button type="button" className="btn btn-primary">
+          <button 
+            onClick={onMessageSend}
+            type="button"
+            className="btn btn-primary">
             Отправить
           </button>
         </form>
