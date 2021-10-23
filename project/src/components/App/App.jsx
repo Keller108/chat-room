@@ -10,7 +10,7 @@ function App() {
     joined: false,
     userName: null,
     roomName: null,
-    users: [],
+    users: [0],
     messages: [],
   });
 
