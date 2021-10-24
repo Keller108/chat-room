@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
+
 const server = require('http').Server(app);
 const io = require('socket.io')(server, {
   cors: {
@@ -16,10 +17,26 @@ const io = require('socket.io')(server, {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+////////////////////////////////////////////////////////
+// ДЛЯ ДАННОГО ЭТАПА Я СОБИРАЮСЬ ХРАНИТЬ ДАННЫЕ В MAP://
+////////////////////////////////////////////////////////
+
 const rooms = new Map();
+app.post('/rooms', (req, res) => {
+  const data = req.body;
+  console.log(data);
+  if (!rooms.has(data.roomName)) {
+    rooms.set(data.roomName, new Map([
+      ['users', new Map()],
+      ['messages', []],
+    ]));
+  }
+  res.send();
+});
 
 app.get('/rooms/:id', (req, res) => {
   const {id: roomName} = req.params;
+  console.log(req);
   const obj = rooms.has(roomName) ? {
     users: [...rooms.get(roomName).get('users').values()],
     messages: [...rooms.get(roomName).get('messages').values()],
@@ -30,17 +47,6 @@ app.get('/rooms/:id', (req, res) => {
     res.json(obj);
 });
 
-app.post('/rooms', (req, res) => {
-  const data = req.body;
-  if (!rooms.has(data.roomName)) {
-    rooms.set(data.roomName, new Map([
-      ['users', new Map()],
-      ['messages', []],
-    ]));
-  }
-  res.send();
-});
-
 io.on('connection', (socket) => {
 
   socket.on('ROOM:JOIN', ({roomName, userName}) => {
@@ -48,7 +54,6 @@ io.on('connection', (socket) => {
     rooms.get(roomName).get('users').set(socket.id, userName);
     const users = [...rooms.get(roomName).get('users').values()];
     socket.broadcast.to(roomName).emit('ROOM:SET_USERS', users);
-    console.log(roomName, userName)
   });
 
   socket.on('ROOM:NEW_MESSAGE', ({roomName, userName, text}) => {
