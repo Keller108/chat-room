@@ -36,7 +36,6 @@ app.post('/rooms', (req, res) => {
 
 app.get('/rooms/:id', (req, res) => {
   const {id: roomName} = req.params;
-  console.log(req);
   const obj = rooms.has(roomName) ? {
     users: [...rooms.get(roomName).get('users').values()],
     messages: [...rooms.get(roomName).get('messages').values()],
