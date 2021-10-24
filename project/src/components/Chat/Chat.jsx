@@ -56,9 +56,10 @@ function Chat({ users, messages, userName, roomName, onAddMessage }) {
             className="form-control"
             rows="3"></textarea>
           <button 
+            className="chat__send-btn"
             onClick={onMessageSend}
             type="button"
-            className="btn btn-primary">
+          >
             Отправить
           </button>
         </form>
