@@ -2,21 +2,32 @@ import React from 'react';
 import './Chat.css';
 import socket from '../../middlewares/socket';
 
-function Chat({ users, messages, userName, roomName }) {
+function Chat({ users, messages, userName, roomName, onAddMessage }) {
   const [messageValue, setMessageValue] = React.useState('');
+  const messageRef = React.useRef(null);
 
   const onMessageSend = () => {
     socket.emit('ROOM:NEW_MESSAGE', {
-      userName: messageValue,
+      userName,
       roomName,
       text: messageValue,
-    })
+    });
+    onAddMessage({
+      userName,
+      text: messageValue,
+    });
     setMessageValue('');
   }; 
+
+  React.useEffect(() => {
+    messageRef.current.scrollTo(0, 99999);
+  },[messages]);
   
   return (
     <div className="chat">
       <div className="chat-users">
+        Комната: <b>{roomName}</b>
+        <hr />
         <b>Онлайн ({users.length}):</b>
         <ul>
           {users.map((name, index) => (
@@ -25,7 +36,7 @@ function Chat({ users, messages, userName, roomName }) {
         </ul>
       </div>
       <div className="chat-messages">
-        <div className="messages">
+        <div ref={messageRef} className="messages">
           {
             messages.map((message) => 
             (

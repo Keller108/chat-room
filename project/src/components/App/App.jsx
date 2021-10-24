@@ -30,16 +30,18 @@ function App() {
       type: 'SET_USERS',
       payload: users,
     });
-  }; 
+  };
+
+  const addMessage = (message) => {
+    dispatch({
+      type: 'NEW_MESSAGE',
+      payload: message,
+    })
+  }
 
   React.useEffect(() => {
     socket.on('ROOM:SET_USERS', setUsers);
-    socket.on('ROOM:NEW_MESSAGE', message => {
-      dispatch({
-        type: 'NEW_MESSAGE',
-        payload: message,
-      })
-    });
+    socket.on('ROOM:NEW_MESSAGE', addMessage);
   },[]);
 
   window.socket = socket;
@@ -47,7 +49,7 @@ function App() {
   console.log(state);
 
   return (
-    <div className="app">{!state.joined ? <Auth onLogin={onLogin}/> : <Chat {...state}/>}</div>
+    <div className="app">{!state.joined ? <Auth onLogin={onLogin}/> : <Chat {...state} onAddMessage={addMessage} />}</div>
   );
 }
 

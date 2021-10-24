@@ -22,7 +22,7 @@
   }
   
   .messages {
-    flex: 1;
+    flex: 1 1;
     height: calc(100% - 155px);
     overflow: auto;
   }
